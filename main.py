@@ -15,8 +15,25 @@ class Digikala:
 
         return tuple(names_)
     
-    def prices(self):
-        ...
+    def urls(self):
+        urls_ = ("www.digikala.com"+str(product['url'].get("uri")) for page in range(1, self.pager() + 1)
+                  for product in get(self.global_url+f"&page={page}").json()['data'].get("products"))
 
+        return tuple(urls_)    
+    def average_stars(self):
+        stars_ = (product["data_layer"].get("dimension9") for page in range(1, self.pager() + 1)
+                  for product in get(self.global_url+f"&page={page}").json()['data'].get("products"))
+
+        return tuple(stars_)
+    def total_scores(self):
+        total_scores_ = (product["rating"].get("rate") for page in range(1, self.pager() + 1)
+                  for product in get(self.global_url+f"&page={page}").json()['data'].get("products"))
+
+        return tuple(total_scores_)
+    def count_of_scores(self):
+        total_scores_ = (product["rating"].get("count") for page in range(1, self.pager() + 1)
+                  for product in get(self.global_url+f"&page={page}").json()['data'].get("products"))
+
+        return tuple(total_scores_)
 dk = Digikala(input("please enter ur search term: "))
-print(dk.names())
+print(f"totoal score is {dk.total_scores()}",f" count of scores is {dk.count_of_scores()}")
