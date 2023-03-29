@@ -1,9 +1,11 @@
 import sqlite3
 import pandas as pd
 from scraper import Digikala
+search_term=input("please enter ur search Item: ")
 
+
+dk=Digikala(search_term)
 def df_creation():
-    dk=Digikala(input("please enter ur search Item: "))
     names=dk.names()
     prices=dk.prices()
     statuses=dk.statuses()
@@ -20,5 +22,7 @@ def df_creation():
     })
     return pd.DataFrame(digikala_list)
 
+df=df_creation().sort_values(["تعداد رای دهندگان","امتیاز کل"],ascending=False)
 
-df_creation().to_excel("digikala.xlsx")
+with sqlite3.connect(f'{search_term}.db') as conn:
+    df.to_sql(f'{search_term}_table', conn, if_exists='replace', index=False)
