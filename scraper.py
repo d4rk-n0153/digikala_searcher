@@ -66,7 +66,7 @@ class Digikala:
         """
         with ThreadPoolExecutor(max_workers=5) as executor:
             products = list(executor.map(self.get_products, range(1, self.pager() + 1)))
-        prices_ = tuple(product["default_variant"]["price"].get("selling_price") if product.get("status") == "marketable" else 0 for page in products for product in page )
+        prices_ = tuple(int(product["default_variant"]["price"].get("selling_price"))/10 if product.get("status") == "marketable" else 0 for page in products for product in page )
         return prices_
 
     def total_scores(self) -> tuple:
